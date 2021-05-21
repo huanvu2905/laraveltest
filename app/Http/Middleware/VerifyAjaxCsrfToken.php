@@ -34,7 +34,16 @@ class VerifyAjaxCsrfToken extends Middleware
      */
     public function handle($request, Closure $next)
     {
-        return true;
+        if (
+            $this->isReading($request) ||
+            $this->runningUnitTests() ||
+            $this->inExceptArray($request) ||
+            $this->tokensMatch($request)
+        ) {
+            return true;
+        }
+
+        throw new TokenMismatchException('CSRF token mismatch.');
     }
 
     /**
