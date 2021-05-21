@@ -16,18 +16,17 @@ class TestController extends AppController
 
     public function submit(Request $request)
     {
-        sleep(5);
+        (new \App\Http\Middleware\VerifyAjaxCsrfToken(app(), app('encrypter')))->handle($request, function() {});
         //check csrf token
         // (new \App\Http\Middleware\VerifyAjaxCsrfToken(app(), app('encrypter')))->handle($request, function() {});
 
         // return Title::create(['title' => $request->title]);
 
         DB::transaction(function () use ($request) {
-            (new \App\Http\Middleware\VerifyAjaxCsrfToken(app(), app('encrypter')))->handle($request, function() {});
-
+            sleep(5);
             Title::create(['title' => $request->title]);
         });
 
-        return back()->withInput();
+        return response()->json([]);
     }
 }

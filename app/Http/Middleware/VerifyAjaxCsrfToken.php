@@ -63,7 +63,7 @@ class VerifyAjaxCsrfToken extends Middleware
             &&
             $this->isFormSubmit($request)
         ) {
-            $request->session()->regenerateToken();
+            $request->session()->forceRegenerateToken();
         }
 
         return $isMatched;
